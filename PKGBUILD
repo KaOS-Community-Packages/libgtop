@@ -1,0 +1,25 @@
+pkgname=libgtop
+pkgver=2.30.0
+pkgrel=1
+pkgdesc="A library that reads information about processes and the running system"
+arch=('x86_64')
+license=('LGPL')
+depends=('glib2' 'libxau' 'texinfo')
+makedepends=('intltool' 'gobject-introspection')
+install=libgtop.install
+source=(http://ftp.gnome.org/pub/gnome/sources/${pkgname}/${pkgver:0:4}/${pkgname}-${pkgver}.tar.xz)
+url="http://www.gnome.org/"
+sha256sums=('463bcbe5737b1b93f3345ee34abf601e8eb864f507c49ff1921c2737abafc1e5')
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  ./configure --prefix=/usr --sysconfdir=/etc \
+      --localstatedir=/var --disable-static \
+      --with-libgtop-smp
+  make
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+}
